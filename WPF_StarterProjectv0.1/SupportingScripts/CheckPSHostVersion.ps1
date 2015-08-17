@@ -4,8 +4,8 @@
 
 do {
     $CheckProgress += 1;
-    Write-Host $CheckProgress    
-    Start-Sleep -m 100
+    Write-Output $CheckProgress    
+    Start-Sleep -m 50
    }
  while($CheckProgress -lt 100)
  
@@ -13,9 +13,7 @@ do {
   if((get-host).version.Major -gt 3)
  
    {  
-      Get-Service
-      Write-Output $ProgressBar
-	   $ProgressBar.Value=20
+
 	  Return 0
    } 
                            
