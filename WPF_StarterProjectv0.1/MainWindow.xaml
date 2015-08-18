@@ -25,8 +25,8 @@
                     <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" CornerRadius="5" Height="191" Margin="0,97,0,0" VerticalAlignment="Top" Width="123">
                         <Grid>
                             <Label Content="Tasks" Margin="9,-1,9,166" HorizontalAlignment="Center"/>
-                            <Rectangle RadiusX="5" RadiusY="5" Fill="LightGray" HorizontalAlignment="Center" Height="25" Margin="0,27,0,0" Stroke="Black" VerticalAlignment="Top" Width="106"/>
-                            <Label Content="Task1" HorizontalAlignment="Left" Margin="10,26,5,0" VerticalAlignment="Top" />
+                            <Rectangle Name="Task1Rect" RadiusX="5" RadiusY="5" Fill="LightGray" HorizontalAlignment="Center" Height="25" Margin="0,27,0,0" Stroke="Black" VerticalAlignment="Top" Width="106"/>
+                            <Label Content="Get-Service" HorizontalAlignment="Left" Margin="10,26,5,0" VerticalAlignment="Top" />
                             <Rectangle RadiusX="5" RadiusY="5" Fill="LightGray" HorizontalAlignment="Center" Height="25" Margin="0,58,0,0" Stroke="Black" VerticalAlignment="Top" Width="106"/>
                             <Label Content="Task2" HorizontalAlignment="Left" Margin="10,57,0,0" VerticalAlignment="Top" />
                             <Rectangle RadiusX="5" RadiusY="5" Fill="LightGray" HorizontalAlignment="Center" Height="25" Margin="0,89,0,0" Stroke="Black" VerticalAlignment="Top" Width="106"/>
@@ -36,7 +36,7 @@
 
                     <ScrollViewer x:Name="ConsoleResult" Background="LightGray" HorizontalAlignment="Stretch" Margin="128,87,10,311"/>
 
-                    <Button Name="excutetasks_runbt1" Content="Run" IsEnabled="True" HorizontalAlignment="Left" Margin="0,70,0,0" VerticalAlignment="Top" Width="123" Click="excutetasks_runbt1_Click"/>
+                    <Button Name="excutetasks_runbt1" Content="Run" IsEnabled="False" HorizontalAlignment="Left" Margin="0,70,0,0" VerticalAlignment="Top" Width="123" Click="excutetasks_runbt1_Click"/>
                     <Label Content="Console out" HorizontalAlignment="Left" Margin="128,61,0,0" VerticalAlignment="Top" Width="80"/>
                     <Label Content="Username" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                     <TextBox Name="UserNameBox" HorizontalAlignment="Left" Height="23" Margin="68,3,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>

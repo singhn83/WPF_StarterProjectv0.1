@@ -198,8 +198,9 @@ namespace WPF_StarterProjectv0._1
                 //we use the Type "object" for the value so that we can pass anything into it regardless of type
                 var args = new Dictionary<string, object>();
 
-                // add "Context" argument with this class as the value, to be passed to the $Context parameter in the script
-                args.Add("Context", this);
+                // add "Window" argument with this class as the value, to be passed to the $Window parameter in the script
+                // this will give the script access to the public members of the MainWindow class
+                args.Add("Window", this);
 
                 // get script path from config file
                 var script = ConfigurationManager.AppSettings["CheckPSHostVersion"];
@@ -229,6 +230,19 @@ namespace WPF_StarterProjectv0._1
                     DepCheckScrollViewer.Content += rs.BaseObject.ToString() + "\r\n";
                 }
 
+                // handle any errors in the error stream (using the PSEngine method 'GetErrorStream()')
+                var errMessage = "";
+                foreach (ErrorRecord err in _psEngine.GetErrorStream())
+                {
+                    errMessage += err.Exception.Message + "\r\n";
+                    errMessage += err.Exception.StackTrace + "\r\n";
+                }
+                if (errMessage.Length > 0)
+                {
+                    // throw exception to be handled in the catch block
+                    throw new Exception(errMessage);
+                }
+
                 // stop the timer
                 dispatcherTimer.Stop();
 
@@ -243,6 +257,8 @@ namespace WPF_StarterProjectv0._1
             }
             catch (Exception ex)
             {
+                // stop the timer
+                dispatcherTimer.Stop();
                 // display exception message in messagebox window
                 MessageBox.Show(ex.Message);
                 // add exception message to console (scroll view)
@@ -272,7 +288,7 @@ namespace WPF_StarterProjectv0._1
                 // add values to args dictionary
                 args.Add("Identity", IdentityBox.Text);
                 args.Add("Creds", new PSCredential(UserNameBox.Text, PasswordInputBox.SecurePassword));
-                args.Add("Context", this);
+                args.Add("Window", this);
 
                 // Use the TaskFactory.StartNew() method to execute the powershell script as an asynchronous task
                 // Documentation on this can be found here: https://msdn.microsoft.com/en-us/library/dd321439(v=vs.110).aspx 
@@ -325,14 +341,40 @@ namespace WPF_StarterProjectv0._1
                     }
                 }
 
-                // add message to the ScrollView
-                ConsoleResult.Content += "Complete";
+                // handle any error returned from the ErrorStream
+                var errMessage = "";
+                foreach (ErrorRecord err in _psEngine.GetErrorStream())
+                {
+                    errMessage += err.Exception.Message + "\r\n";
+                    errMessage += err.Exception.StackTrace + "\r\n";
+                }
+                if (errMessage.Length > 0)
+                {
+                    throw new Exception(errMessage);
+                }
 
                 // To create the data in the DataGrid, we just have to set the ItemsSource property to 
                 // an object that implements the IEnumerable interface (such as a List or ArrayList)... 
                 // in this case, we can pass in our List<ServiceResult> serviceResultList, and the Grid creates itself
                 // from the data contained in the list. Simple!
-                ResultGrid.ItemsSource = serviceResultList;
+                if (serviceResultList.Count > 0 )
+                {
+                    ResultGrid.ItemsSource = serviceResultList;
+                }
+                // get the status code, which should be the final object from the array of returned results
+                var statusCode = int.Parse(results[results.Length - 1].BaseObject.ToString());
+
+                if (statusCode == 0)
+                {
+                    // add message to the ScrollView
+                    ConsoleResult.Content += "Complete";
+                    Task1Rect.Fill = new SolidColorBrush(System.Windows.Media.Colors.LightGreen);
+                    
+                }
+                else
+                {
+                    ConsoleResult.Content += "Return code: " + statusCode + ". Please investigate";
+                }
             }
             catch (Exception ex)
             {
@@ -376,9 +418,8 @@ namespace WPF_StarterProjectv0._1
                     var writer = new StreamWriter(sfd.OpenFile());
                     writer.WriteLine(result);
                     writer.Close();
+                    MessageBox.Show("CSV Export complete");
                 }
-
-                MessageBox.Show("CSV Export complete!");
             }
             catch (Exception ex)
             {
