@@ -1,31 +1,27 @@
-﻿ # Get-Host | Write-Output | Out-String
+﻿Param(
+	$Window #this is the MainWindow object
+)
  
- $CheckProgress=0;
-
-do {
-    $CheckProgress += 1;
-    Write-Host $CheckProgress    
-    Start-Sleep -m 100
-   }
- while($CheckProgress -lt 100)
+try
+{
+	do {
+	    #increment the MainProgress property in the MainWindow class
+	    $Window.MainProgress += 1;
+		Start-Sleep -m 50
+	} while($Window.MainProgress -le 100)
  
- 
-  if((get-host).version.Major -gt 3)
- 
-   {  
-      Get-Service
-      Write-Output $ProgressBar
-	   $ProgressBar.Value=20
-	  Return 0
-   } 
-                           
-  else
-  
-   { 
-   
-   Write-Output "Error: Dependency check failed. Please consult your SA"
-   Write-Output $ProgressBar
-   Return 1
-   
-   }
+    if((get-host).version.Major -gt 3)
+	{  
+	    Get-Host | Out-String
+        Return 0
+	} else {
+	    Throw "Error: Dependency check failed. Please consult your SA"
+	}
+}
+catch [Exception]
+{
+	$failMessage = "$($_.Exception.ToString()).$($_.InvocationInfo.PositionMessage)"
+	Write-Error $failMessage
+	return 1
+}
    
