@@ -1,13 +1,13 @@
-﻿ # Get-Host | Write-Output | Out-String
+﻿Param(
+	$Context
+)
  
- $CheckProgress=0;
 
 do {
-    $CheckProgress += 1;
-    Write-Output $CheckProgress    
+    $Context.MainProgress += 1;
     Start-Sleep -m 50
    }
- while($CheckProgress -lt 100)
+ while($Context.MainProgress -le 100)
  
  
   if((get-host).version.Major -gt 3)

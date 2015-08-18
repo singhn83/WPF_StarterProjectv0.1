@@ -13,9 +13,9 @@
                     <Button Name="DepCheckButton" Content="Run Dependency Check" HorizontalAlignment="Left" Margin="8,7,0,0" VerticalAlignment="Top" Width="139" Click="DepCheckButton_Click"/>
                     <Label Content="Results:" FontSize="15" HorizontalAlignment="Left" Margin="9,32,0,0" VerticalAlignment="Top" Height="29" RenderTransformOrigin="0.583,-0.621"/>
                     <Label Name="Main_Timer" Content="00:00" HorizontalAlignment="Left" Margin="665,32,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.105,-0.615" Width="53"/>
-                    <ProgressBar Name="Main_ProgressBar" Minimum="0" Maximum="100" Value="{Binding progress, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,65,0,214" RenderTransformOrigin="0.469,-7.429" />
-                    <TextBlock Text="{Binding ElementName=Main_ProgressBar, Path=Value, StringFormat={}{0:0}%}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                    <ScrollViewer Name="DepCheckScrollViewer" Background="LightGray" Padding="5,5,5,5" Margin="0,86,0,0" />
+                    <ProgressBar Name="Main_ProgressBar" Minimum="{Binding Minimum}" Maximum="{Binding Maximum}" Value="{Binding MainProgress}" Margin="5,65,5,381" />
+                    <TextBlock Name="MainProgLabel" Text="{Binding ElementName=Main_ProgressBar, Path=Value, StringFormat={}{0}%}" Margin="74,40,559,411"/>
+                    <ScrollViewer Name="DepCheckScrollViewer" Background="LightGray" Padding="5,5,5,5" Margin="0,96,0,0" />
 
                 </Grid>
             </TabItem>
@@ -46,13 +46,15 @@
                     <TextBox Name="IdentityBox" HorizontalAlignment="Left" Height="23" Margin="68,33,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
                     <DataGrid x:Name="ResultGrid" HorizontalAlignment="Stretch" Margin="128,184,0,0" VerticalAlignment="Stretch"/>
                     <Label Content="Data" HorizontalAlignment="Left" Margin="128,165,0,0" VerticalAlignment="Top" Width="80" Height="25"/>
-                    <ProgressBar Name="TasksProgressBar" Value="{Binding progress, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="23" Margin="559,48,0,0" VerticalAlignment="Top" Width="159"/>
-
+                    <ProgressBar Name="TasksProgressBar" Value="{Binding Progress}" Maximum="{Binding Maximum}" Minimum="{Binding Minimum}" HorizontalAlignment="Left" Height="23" Margin="559,48,0,0" VerticalAlignment="Top" Width="159"/>
+                    <TextBlock Name="ProgLabel" Text="{Binding ElementName=TasksProgressBar, Path=Value, StringFormat={}{0}%}" HorizontalAlignment="Left" Margin="523,48,0,0" VerticalAlignment="Top" Width="36" Height="23" />
+                    <Button Name="ExportButton" Content="Export Data" Margin="0,433,605,10" Click="ExportButton_Click"/>
                 </Grid>
             </TabItem>
             <TabItem Header="About">
 
             </TabItem>
+
 
 
 

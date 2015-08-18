@@ -7,6 +7,7 @@ namespace WPF_StarterProjectv0._1
     /// </summary>
     public class ServiceResult
     {
+        // create properties
         public String Status { get; set; }
         public String Name { get; set; }
         public String DisplayName { get; set; }

@@ -35,9 +35,8 @@ namespace WPF_StarterProjectv0._1
 
 
     public partial class MainWindow : Window, INotifyPropertyChanged
-    { 
+    {
         private PSEngine _psEngine;
-        // declare DispatcherTimer object. Documentation is helpful: https://msdn.microsoft.com/en-us/library/system.windows.threading.dispatchertimer(v=vs.110).aspx
         private System.Windows.Threading.DispatcherTimer dispatcherTimer;
         private int secs;
         private int mins;
@@ -53,41 +52,32 @@ namespace WPF_StarterProjectv0._1
             secs = 0;
             mins = 0;
             hrs = 0;
-            // set datacontext property for progressbars to this class. This is necessary for setting up binding.
             this.TasksProgressBar.DataContext = this;
             this.Main_ProgressBar.DataContext = this;
-            // set initial values for Progress/Min/Max 
             MainProgress = 0;
             Progress = 0;
             Maximum = 100.0;
             Minimum = 0.0;
-            // initialize DispatcherTimer
             dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
-            // subscribe to the dispatcherTimer_Tick event. Documentation on event subscription: https://msdn.microsoft.com/en-us/library/ms366768.aspx
             dispatcherTimer.Tick += dispatcherTimer_Tick;
-            // set interval for firing the dispatcherTimer_Tick event. Uses TimeSpan(hrs, mins, secs)
             dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
 
         }
-        // below, we create a set of private fields with public properties (with getters and setters),
-        // for Minimum, Maximum, and Progress. Within the setter for each public property, an event (OnPropertyChanged) is triggered
-        // the progress bar responds to the OnPropertyChanged event.
+
         private double _minimum;
 
         public double Minimum
         {
-            // getter
             get { return _minimum; }
-            // setter
+
             set
             {
                 if (_minimum.Equals(value))
                 {
                     return;
                 }
-                // set value
+
                 _minimum = value;
-                // trigger event
                 OnPropertyChanged();
             }
         }
@@ -104,9 +94,8 @@ namespace WPF_StarterProjectv0._1
                 {
                     return;
                 }
-                //set value
+
                 _maximum = value;
-                // trigger event
                 OnPropertyChanged();
             }
         }
@@ -123,9 +112,9 @@ namespace WPF_StarterProjectv0._1
                 {
                     return;
                 }
-                //set value
+
                 _progress = value;
-                // trigger event
+
                 OnPropertyChanged();
             }
         }
@@ -142,17 +131,15 @@ namespace WPF_StarterProjectv0._1
                 {
                     return;
                 }
-                // set value
+
                 _mainProgress = value;
-                // trigger event
+
                 OnPropertyChanged();
             }
         }
 
-        // create event handler
         public event PropertyChangedEventHandler PropertyChanged;
 
-        // method for handling property change
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChangedEventHandler handler = PropertyChanged;
@@ -345,45 +332,32 @@ namespace WPF_StarterProjectv0._1
             }
         }
 
-        /// <summary>
-        /// Executes the CSV export process
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void ExportButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                // select all cells
                 ResultGrid.SelectAllCells();
-                // copy data to clipboard
                 ResultGrid.ClipboardCopyMode = DataGridClipboardCopyMode.IncludeHeader;
                 ApplicationCommands.Copy.Execute(null, ResultGrid);
-                // clipboard contains data... unselect all cells
                 ResultGrid.UnselectAllCells();
-                // save data from clipboard to variable
                 var result = (string)Clipboard.GetData(DataFormats.CommaSeparatedValue);
-                // data is in variable, clear clipboard
                 Clipboard.Clear();
 
-                // create a Save-File Dialog
                 var sfd = new System.Windows.Forms.SaveFileDialog();
                 sfd.Filter = @"CSV files (*.csv)|*.csv";
-                // if dialog displayed successfully
                 if (sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    // write data to file using a StreamWriter
                     var writer = new StreamWriter(sfd.OpenFile());
                     writer.WriteLine(result);
                     writer.Close();
                 }
 
-                MessageBox.Show("CSV Export complete!");
+                MessageBox.Show("CSV Export complete.");
             }
             catch (Exception ex)
             {
                 MessageBox.Show("CSV Export failed. \n" + ex.Message);
-                Debug.WriteLine(ex);
             }
         }
 
